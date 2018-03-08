@@ -263,6 +263,10 @@
       <Project>{BDA068F5-8B64-4CC4-BC48-31255654992B}</Project>
       <Name>MasGlobalApp.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MasGlobalApp.DataAccess\MasGlobalApp.DataAccess.csproj">
+      <Project>{BAED54F1-0B7D-4328-9448-3064E6031816}</Project>
+      <Name>MasGlobalApp.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -30,13 +30,6 @@ namespace MasGlobalAppTest
 
             MonthlySalaryEmployee salaryEmployee = new MonthlySalaryEmployee(employee);
             Assert.IsTrue(salaryEmployee != null && salaryEmployee.AnnualSalary > 0);
-        }
-
-        [TestMethod]
-        public void TestGetEmployees()
-        {
-            var list = factory.GetEmployees();
-            Assert.IsTrue(list.Count > 0);
-        }
+        }        
     }
 }

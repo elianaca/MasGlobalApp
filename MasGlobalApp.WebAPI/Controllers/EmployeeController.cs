@@ -1,4 +1,5 @@
 ﻿using MasGlobalApp.BL;
+using MasGlobalApp.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace MasGlobalApp.WebAPI.Controllers
     public class EmployeeController : ApiController
     {
         EmployeesFactory factory = new EmployeesFactory();
+        APIRepository repository = new APIRepository();
 
         /// <summary>
         /// Gets all eployees.
@@ -18,7 +20,15 @@ namespace MasGlobalApp.WebAPI.Controllers
         /// <returns></returns>
         public IHttpActionResult GetAllEployees()
         {
-            return Ok(factory.GetEmployees());
+            var employees = repository.GetEmployees();
+            List<BaseEmployee> baseEmployees = new List<BaseEmployee>();
+
+            foreach (var employee in employees)
+            {
+                baseEmployees.Add(factory.GetEmployee(employee));
+            }
+
+            return Ok(baseEmployees);
         }
 
         /// <summary>
@@ -28,7 +38,7 @@ namespace MasGlobalApp.WebAPI.Controllers
         /// <returns></returns>
         public IHttpActionResult GetEmployee(int id)
         {
-            var employee = factory.GetEmployees().FirstOrDefault((p) => p.Employee.Id == id);
+            var employee = repository.GetEmployees().FirstOrDefault((p) => p.Id == id);
 
             if (employee == null)
             {
