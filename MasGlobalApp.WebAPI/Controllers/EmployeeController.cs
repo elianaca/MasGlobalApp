@@ -45,7 +45,7 @@ namespace MasGlobalApp.WebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(employee);
+            return Ok(factory.GetEmployee(employee));
         }
     }
 }
