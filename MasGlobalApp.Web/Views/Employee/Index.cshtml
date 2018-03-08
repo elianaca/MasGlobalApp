@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Employees</h2>
+<div class="col-md-2">
+    <label>Enter the Employee Id</label>
+</div>
+<div class="col-md-2">
+    <input type="number" id="employeeId" />
+</div>
+<div class="col-md-2">
+    <input type="submit" id="getEmployee" value="Get Employee" />
+</div>
+<div class="container">     
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Contract Type</th>
+                <th>Role Id</th>
+                <th>Role Name</th>
+                <th>Role Description</th>
+                <th>Hourly Salary</th>
+                <th>Monthly Salary</th>
+                <th>Annual Salary</th>
+            </tr>
+        </thead>
+        <tbody id="employeeTable">
+
+        </tbody>
+    </table>    
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var uri = 'http://localhost:53284/api/Employee/';
+            jQuery.support.cors = true;
+
+            //Fills the entire table
+            $.ajax({
+                type: 'GET',
+                url: uri,
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function (data) {
+                    var row = "";
+                    $.each(data, function (index, item) {
+                        row += "<tr><td>" + item.Employee.Id + "</td>" +
+                            "<td>" + item.Employee.Name + "</td>" +
+                            "<td>" + item.Employee.ContractTypeName + "</td>" +
+                            "<td>" + item.Employee.RoleId + "</td>" +
+                            "<td>" + item.Employee.RoleName + "</td>" +
+                            "<td>" + item.Employee.RoleDescription + "</td>" +
+                            "<td>" + item.Employee.HourlySalary + "</td>" +
+                            "<td>" + item.Employee.MonthlySalary + "</td>" +
+                            "<td>" + item.AnnualSalary + "</td></tr>";
+                    });
+
+                    $("#employeeTable").html(row);
+                }
+
+            });
+
+            //Gets only one employee
+            $('#getEmployee').on('click', function () {
+                $.ajax({
+                    type: 'GET',
+                    url: uri + 'GetEmployee?id=' + $('#employeeId').val(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#employeeTable").find("tr:gt(0)").remove();
+                        var row = "";                            
+
+                        row += "<tr><td>" + data.Employee.Id + "</td>" +
+                            "<td>" + data.Employee.Name + "</td>" +
+                            "<td>" + data.Employee.ContractTypeName + "</td>" +
+                            "<td>" + data.Employee.RoleId + "</td>" +
+                            "<td>" + data.Employee.RoleName + "</td>" +
+                            "<td>" + data.Employee.RoleDescription + "</td>" +
+                            "<td>" + data.Employee.HourlySalary + "</td>" +
+                            "<td>" + data.Employee.MonthlySalary + "</td>" +
+                            "<td>" + data.AnnualSalary + "</td></tr>";
+
+                        $("#employeeTable").html(row);
+                    },
+                    error: function (response) {
+                        alert('error');
+                        $("#employeeTable").empty();
+                    }
+                    
+                });
+            });
+        });
+
+    </script>
+}
