@@ -12,7 +12,7 @@
 <div class="col-md-2">
     <input type="submit" id="getEmployee" value="Get Employee" />
 </div>
-<div class="container">     
+<div class="container">
     <table class="table">
         <thead>
             <tr>
@@ -27,18 +27,55 @@
                 <th>Annual Salary</th>
             </tr>
         </thead>
-        <tbody id="employeeTable">
-
-        </tbody>
-    </table>    
+        <tbody id="employeeTable"></tbody>
+    </table>
 </div>
 
 @section Scripts {
     <script type="text/javascript">
+        var uri = 'http://localhost:53284/api/Employee/';
+
         $(document).ready(function () {
-            var uri = 'http://localhost:53284/api/Employee/';
             jQuery.support.cors = true;
 
+            GetEmployees();
+
+            //Gets only one employee
+            $('#getEmployee').on('click', function () {
+                if ($('#employeeId').val() === '')
+                {
+                    GetEmployees();
+                    return;
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: uri + 'GetEmployee?id=' + $('#employeeId').val(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#employeeTable").find("tr:gt(0)").remove();
+                        var row = "";
+
+                        row += "<tr><td>" + data.Employee.Id + "</td>" +
+                            "<td>" + data.Employee.Name + "</td>" +
+                            "<td>" + data.Employee.ContractTypeName + "</td>" +
+                            "<td>" + data.Employee.RoleId + "</td>" +
+                            "<td>" + data.Employee.RoleName + "</td>" +
+                            "<td>" + data.Employee.RoleDescription + "</td>" +
+                            "<td>" + data.Employee.HourlySalary + "</td>" +
+                            "<td>" + data.Employee.MonthlySalary + "</td>" +
+                            "<td>" + data.AnnualSalary + "</td></tr>";
+
+                        $("#employeeTable").html(row);
+                    },
+                    error: function (response) {
+                        $("#employeeTable").empty();
+                    }
+                });
+            });
+        });
+
+        function GetEmployees() {
             //Fills the entire table
             $.ajax({
                 type: 'GET',
@@ -63,38 +100,6 @@
                 }
 
             });
-
-            //Gets only one employee
-            $('#getEmployee').on('click', function () {
-                $.ajax({
-                    type: 'GET',
-                    url: uri + 'GetEmployee?id=' + $('#employeeId').val(),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: 'json',
-                    success: function (data) {
-                        $("#employeeTable").find("tr:gt(0)").remove();
-                        var row = "";                            
-
-                        row += "<tr><td>" + data.Employee.Id + "</td>" +
-                            "<td>" + data.Employee.Name + "</td>" +
-                            "<td>" + data.Employee.ContractTypeName + "</td>" +
-                            "<td>" + data.Employee.RoleId + "</td>" +
-                            "<td>" + data.Employee.RoleName + "</td>" +
-                            "<td>" + data.Employee.RoleDescription + "</td>" +
-                            "<td>" + data.Employee.HourlySalary + "</td>" +
-                            "<td>" + data.Employee.MonthlySalary + "</td>" +
-                            "<td>" + data.AnnualSalary + "</td></tr>";
-
-                        $("#employeeTable").html(row);
-                    },
-                    error: function (response) {
-                        alert('error');
-                        $("#employeeTable").empty();
-                    }
-                    
-                });
-            });
-        });
-
+        }
     </script>
 }
